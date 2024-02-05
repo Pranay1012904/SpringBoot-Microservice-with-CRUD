@@ -4,10 +4,12 @@ import com.springboot.blogrestapi.dto.PostDto;
 import com.springboot.blogrestapi.entity.Post;
 import com.springboot.blogrestapi.service.PostService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 @RestController
@@ -21,8 +23,13 @@ public class PostController {
        return new ResponseEntity<>(postService.createPost(post), HttpStatus.CREATED) ;
     }
     @GetMapping
-    public List<PostDto> getAllPosts(){
-        return postService.getAllPosts();
+    public List<PostDto> getAllPosts(
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
+    ){
+      //  Pageable pageable= (Pageable) PageRequest.of(pageNo, pageSize);
+        //    postr
+        return postService.getAllPosts(pageNo, pageSize);
     }
     @GetMapping("{id}")
     public ResponseEntity<PostDto> getPostById(@PathVariable Long id){
