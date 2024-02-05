@@ -9,6 +9,9 @@ import com.springboot.blogrestapi.service.PostService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -38,9 +41,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPosts() {
-       List<Post> allPosts= postRepository.findAll();
-      return allPosts.stream().map(PostMapper::eTd).collect(Collectors.toList());
+    public List<PostDto> getAllPosts(int pageNo, int pageSize) {
+        Pageable pageable= PageRequest.of(pageNo, pageSize);
+       Page<Post> allPosts= postRepository.findAll(pageable);
+       List<Post> listPosts= allPosts.getContent();
+      return listPosts.stream().map(PostMapper::eTd).collect(Collectors.toList());
     }
 
     @Override
