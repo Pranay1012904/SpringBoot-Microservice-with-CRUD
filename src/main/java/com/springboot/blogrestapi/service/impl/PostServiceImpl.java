@@ -1,6 +1,7 @@
 package com.springboot.blogrestapi.service.impl;
 
 import com.springboot.blogrestapi.dto.PostDto;
+import com.springboot.blogrestapi.dto.PostResponse;
 import com.springboot.blogrestapi.entity.Post;
 import com.springboot.blogrestapi.exception.ResourceNotFoundException;
 import com.springboot.blogrestapi.mapper.PostMapper;
@@ -41,11 +42,20 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPosts(int pageNo, int pageSize) {
+    public PostResponse getAllPosts(int pageNo, int pageSize) {
         Pageable pageable= PageRequest.of(pageNo, pageSize);
        Page<Post> allPosts= postRepository.findAll(pageable);
        List<Post> listPosts= allPosts.getContent();
-      return listPosts.stream().map(PostMapper::eTd).collect(Collectors.toList());
+      List<PostDto> content= listPosts.stream().map(PostMapper::eTd).collect(Collectors.toList());
+        PostResponse postResponse=new PostResponse(
+                content,
+                allPosts.getNumber(),
+                allPosts.getSize(),
+                allPosts.getTotalElements(),
+                allPosts.getTotalPages(),
+                allPosts.isLast()
+        );
+      return postResponse;
     }
 
     @Override
