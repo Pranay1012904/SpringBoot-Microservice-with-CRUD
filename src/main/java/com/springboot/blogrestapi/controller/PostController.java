@@ -1,8 +1,10 @@
 package com.springboot.blogrestapi.controller;
 
 import com.springboot.blogrestapi.dto.PostDto;
+import com.springboot.blogrestapi.dto.PostResponse;
 import com.springboot.blogrestapi.entity.Post;
 import com.springboot.blogrestapi.service.PostService;
+import com.springboot.blogrestapi.utils.AppConstants;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -23,9 +25,9 @@ public class PostController {
        return new ResponseEntity<>(postService.createPost(post), HttpStatus.CREATED) ;
     }
     @GetMapping
-    public List<PostDto> getAllPosts(
-            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
+    public PostResponse getAllPosts(
+            @RequestParam(value = AppConstants.PAGE_NUMBER, defaultValue = AppConstants.PAGE_NUMBER_DEFAULT, required = false) int pageNo,
+            @RequestParam(value = AppConstants.PAGE_SIZE, defaultValue = AppConstants.PAGE_SIZE_DEFAULT, required = false) int pageSize
     ){
         return postService.getAllPosts(pageNo, pageSize);
     }
